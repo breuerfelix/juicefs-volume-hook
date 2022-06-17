@@ -1,0 +1,6 @@
+domain: github.com
+layout:
+- go.kubebuilder.io/v3
+projectName: juicefs-volume-hook
+repo: github.com/breuerfelix/juicefs-volume-hook
+version: "3"
