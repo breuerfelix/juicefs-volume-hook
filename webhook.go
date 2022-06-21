@@ -20,16 +20,28 @@ type podAnnotator struct {
 
 func (a *podAnnotator) Handle(ctx context.Context, req admission.Request) admission.Response {
 	pod := &corev1.Pod{}
-	err := a.decoder.Decode(req, pod)
-	if err != nil {
+	if err := a.decoder.Decode(req, pod); err != nil {
 		return admission.Errored(http.StatusBadRequest, err)
 	}
 
-	for ci := range pod.Spec.Containers {
-		c := &pod.Spec.Containers[ci]
-		for vi := range c.VolumeMounts {
-			v := &c.VolumeMounts[vi]
-			v.MountPropagation = (*corev1.MountPropagationMode)(pointer.String("HostToContainer"))
+	for i := range pod.Spec.Volumes {
+		volume := &pod.Spec.Volumes[i]
+		if volume.PersistentVolumeClaim == nil {
+			// only update volumes that are of type pvc
+			continue
+		}
+
+		for ii := range pod.Spec.Containers {
+			container := &pod.Spec.Containers[ii]
+			for iii := range container.VolumeMounts {
+				volumeMount := &container.VolumeMounts[iii]
+
+				if volumeMount.Name != volume.Name {
+					continue
+				}
+
+				volumeMount.MountPropagation = (*corev1.MountPropagationMode)(pointer.String("HostToContainer"))
+			}
 		}
 	}
 
@@ -37,6 +49,7 @@ func (a *podAnnotator) Handle(ctx context.Context, req admission.Request) admiss
 	if err != nil {
 		return admission.Errored(http.StatusInternalServerError, err)
 	}
+
 	return admission.PatchResponseFromRaw(req.Object.Raw, marshaledPod)
 }
 
