@@ -31,6 +31,9 @@ func (a *podAnnotator) Handle(ctx context.Context, req admission.Request) admiss
 			continue
 		}
 
+		// TODO (optional)
+		// query given PVC and check for a given storageClassName
+
 		for ii := range pod.Spec.Containers {
 			container := &pod.Spec.Containers[ii]
 			for iii := range container.VolumeMounts {

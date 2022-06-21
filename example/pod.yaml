@@ -1,12 +1,50 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: example
+
 ---
 apiVersion: v1
-kind: Pod
+kind: PersistentVolumeClaim
 metadata:
-  name: nginx
+  name: web-pvc
+  namespace: example
 spec:
-  containers:
-  - name: nginx
-    image: nginx:1.14.2
-    ports:
-    - containerPort: 80
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Pi
+  #storageClassName: juicefs
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-run
+  namespace: example
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: busybox
+          command: ["sleep", "10000000"]
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /config
+              name: web-data
+              # this will be added by the webhook automatically
+              # mountPropagation: HostToContainer
+      volumes:
+        - name: web-data
+          persistentVolumeClaim:
+            claimName: web-pvc
 
