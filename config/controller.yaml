@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: juicefs
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: juicefs-volume-hook
+  namespace: juicefs
+  annotations:
+    "keel.sh/policy": "force"
+    "keel.sh/trigger": "poll"
+    "keel.sh/pollSchedule": "@hourly"
+spec:
+  selector:
+    matchLabels:
+      app: juicefs-volume-hook
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: juicefs-volume-hook
+    spec:
+      containers:
+      - name: juicefs-volume-hook
+        image: ghcr.io/breuerfelix/juicefs-volume-hook:latest
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      terminationGracePeriodSeconds: 10
+
