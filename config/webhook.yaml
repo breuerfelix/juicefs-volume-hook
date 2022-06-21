@@ -3,11 +3,17 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: juicefs-volume-hook
+  annotations:
+    cert-manager.io/inject-ca-from: juicefs/juicefs-volume-hook
 webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
-    url: "https://juicefs-hook.fbr.ai/mutate-pod"
+    service:
+      namespace: juicefs
+      name: juicefs-volume-hook
+      port: 9443
+      path: "/mutate-pod"
   failurePolicy: Fail
   name: mpod.kb.io
   rules:

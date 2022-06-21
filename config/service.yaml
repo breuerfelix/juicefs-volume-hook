@@ -6,36 +6,33 @@ metadata:
   namespace: juicefs
 spec:
   ports:
-    - name: http
-      port: 80
+    - name: https
+      port: 9443
       protocol: TCP
-      targetPort: 9443
   selector:
     app: juicefs-volume-hook
 
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
 metadata:
   name: juicefs-volume-hook
   namespace: juicefs
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  tls:
-    - secretName: juicefs-volume-hook-tls
-      hosts:
-        - juicefs-hook.fbr.ai
-  rules:
-  - host: juicefs-hook.fbr.ai
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: juicefs-volume-hook-tls
-            port:
-              name: http
+  secretName: juicefs-volume-hook-tls
+  dnsNames:
+    - juicefs-volume-hook.juicefs.svc
+  issuerRef:
+    name: selfsigned
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned
+  namespace: juicefs
+spec:
+  selfSigned: {}
 

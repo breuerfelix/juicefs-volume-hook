@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
@@ -25,8 +25,13 @@ func (a *podAnnotator) Handle(ctx context.Context, req admission.Request) admiss
 		return admission.Errored(http.StatusBadRequest, err)
 	}
 
-	// mutate the fields in pod
-	fmt.Println("HOOK CALLED")
+	for ci := range pod.Spec.Containers {
+		c := &pod.Spec.Containers[ci]
+		for vi := range c.VolumeMounts {
+			v := &c.VolumeMounts[vi]
+			v.MountPropagation = (*corev1.MountPropagationMode)(pointer.String("HostToContainer"))
+		}
+	}
 
 	marshaledPod, err := json.Marshal(pod)
 	if err != nil {
