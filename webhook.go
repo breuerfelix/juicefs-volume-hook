@@ -11,14 +11,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// +kubebuilder:webhook:path=/mutate-v1-pod,mutating=true,failurePolicy=fail,groups="",resources=pods,verbs=create;update,versions=v1,name=mpod.kb.io,admissionReviewVersions=v1,sideEffects=none
-
-type podAnnotator struct {
+type podWebhook struct {
 	Client  client.Client
 	decoder *admission.Decoder
 }
 
-func (a *podAnnotator) Handle(ctx context.Context, req admission.Request) admission.Response {
+func (a *podWebhook) Handle(ctx context.Context, req admission.Request) admission.Response {
 	pod := &corev1.Pod{}
 	if err := a.decoder.Decode(req, pod); err != nil {
 		return admission.Errored(http.StatusBadRequest, err)
@@ -56,7 +54,7 @@ func (a *podAnnotator) Handle(ctx context.Context, req admission.Request) admiss
 	return admission.PatchResponseFromRaw(req.Object.Raw, marshaledPod)
 }
 
-func (a *podAnnotator) InjectDecoder(d *admission.Decoder) error {
+func (a *podWebhook) InjectDecoder(d *admission.Decoder) error {
 	a.decoder = d
 	return nil
 }
