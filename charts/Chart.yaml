@@ -1,4 +1,0 @@
-apiVersion: v1
-name: juicefs-volume-hook
-description: Mutates mountPropagation for volumes mounted with juiceFS
-version: 0.1.0

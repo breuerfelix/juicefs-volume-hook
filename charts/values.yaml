@@ -1,6 +1,0 @@
-controller:
-  annotations:
-    "keel.sh/policy": "force"
-    "keel.sh/trigger": "poll"
-    "keel.sh/pollSchedule": "@hourly"
-
