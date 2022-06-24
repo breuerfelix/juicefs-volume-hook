@@ -15,7 +15,7 @@ webhooks:
       port: 9443
       path: "/mutate-pod"
   failurePolicy: Fail
-  name: {{ .Chart.Name }}
+  name: juicefs.breuer.dev
   rules:
   - apiGroups:
     - ""
