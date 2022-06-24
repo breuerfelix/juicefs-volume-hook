@@ -4,18 +4,20 @@ This mutating webhook transforms all `volumeMounts` of ALL pods which use a `Per
 
 ## prerequisites
 
+* have `helm` installed on your computer
 * have `cert-manager` installed in your cluster
 
 ## installation
 
 ```bash
 kubectl create namespace juicefs
-kubectl apply -f config/
+helm repo add juicefs-volume-hook https://breuerfelix.github.io/juicefs-volume-hook
+helm repo update
+helm install juicefs-volume-hook juicefs-volume-hook/juicefs-volume-hook -n juicefs
 ```
 
 # TODO
 
-* Helmchart
 * annotate only specific mounts (via annotation?)
 
 # Nice to Know

@@ -43,4 +43,5 @@ spec:
         - name: tls
           secret:
             secretName: {{ .Chart.Name }}-tls
+            optional: false
 
