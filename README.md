@@ -16,6 +16,20 @@ helm repo update
 helm install juicefs-volume-hook juicefs-volume-hook/juicefs-volume-hook -n juicefs
 ```
 
+## usage
+
+### default
+
+The controller will convert ALL `volumeMount.mountPropagation` fileds which have a `PersistentVolumeClaim` to be `HostToContainer`.
+
+### via annotation
+
+Start the controller with the `--pod-annotation` flag and the controller will ONLY process pods which have set the `juicefs.volume.hook/mount-propagation` annotation to `"true"`.
+
+### via storageclass
+
+Start the controller with the `--storage-classes=foobar` flag in order to ONLY process `volumeMounts` that have the given storage classes. Multiple storage classes have to be comma separated.
+
 # TODO
 
 * annotate only specific mounts (via annotation?)
