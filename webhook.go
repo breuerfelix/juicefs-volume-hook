@@ -35,7 +35,12 @@ func (a *podWebhook) Handle(ctx context.Context, req admission.Request) admissio
 			return admission.Allowed("Got no pod annotation.")
 		}
 
-		if parsed, err := strconv.ParseBool(value); err != nil || !parsed {
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return admission.Errored(http.StatusBadRequest, err)
+		}
+
+		if !parsed {
 			return admission.Allowed("Pod annotation says false.")
 		}
 	}
@@ -54,11 +59,11 @@ func (a *podWebhook) Handle(ctx context.Context, req admission.Request) admissio
 				Name:      volume.PersistentVolumeClaim.ClaimName,
 				Namespace: pod.Namespace,
 			}, &pvc); err != nil {
-				return admission.Errored(0, err)
+				return admission.Errored(http.StatusBadRequest, err)
 			}
 
 			if pvc.Spec.StorageClassName == nil {
-				// skip this mound
+				// skip this mount
 				continue
 			}
 

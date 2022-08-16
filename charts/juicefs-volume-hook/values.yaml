@@ -1,3 +1,5 @@
 controller:
   annotations:
+  podAnnotation: false
+  storageClasses:
 
