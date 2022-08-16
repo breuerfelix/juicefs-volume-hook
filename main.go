@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"strings"
 
@@ -41,7 +42,10 @@ func main() {
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
 
-	storageClassList := strings.Split(storageClasses, ",")
+	storageClassList := []string{}
+	if storageClasses != "" {
+		storageClassList = strings.Split(storageClasses, ",")
+	}
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
