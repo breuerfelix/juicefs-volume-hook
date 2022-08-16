@@ -22,6 +22,15 @@ spec:
       - name: {{ .Chart.Name }}
         image: ghcr.io/breuerfelix/juicefs-volume-hook:latest
         imagePullPolicy: Always
+{{- if or .Values.controller.podAnnotation .Values.controller.storageClasses }}
+        args:
+{{- if .Values.controller.podAnnotation }}
+        - "-pod-annotation"
+{{- end }}
+{{- if .Values.controller.storageClasses }}
+        - "-storage-classes={{ .Values.controller.storageClasses }}"
+{{- end }}
+{{- end }}
         volumeMounts:
         - name: tls
           mountPath: "/tmp/k8s-webhook-server/serving-certs"
