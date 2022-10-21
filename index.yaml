@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   juicefs-volume-hook:
   - apiVersion: v1
+    created: "2022-10-21T14:59:36.234350387Z"
+    description: Mutates mountPropagation for volumes mounted with juiceFS
+    digest: 1244e1b38ff458757f214c30ab6613c51a86e3286b4d09fb0fe6fb1feaf89148
+    name: juicefs-volume-hook
+    urls:
+    - https://github.com/breuerfelix/juicefs-volume-hook/releases/download/juicefs-volume-hook-0.2.3/juicefs-volume-hook-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v1
     created: "2022-08-16T20:26:24.858969712Z"
     description: Mutates mountPropagation for volumes mounted with juiceFS
     digest: fdc137f5305b0cbe0604d80551d3c6bdd77b41ac28a26bec423107b4818a8a6e
@@ -33,4 +41,4 @@ entries:
     urls:
     - https://github.com/breuerfelix/juicefs-volume-hook/releases/download/juicefs-volume-hook-0.1.2/juicefs-volume-hook-0.1.2.tgz
     version: 0.1.2
-generated: "2022-08-16T20:26:24.859262927Z"
+generated: "2022-10-21T14:59:36.234378389Z"
