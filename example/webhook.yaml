@@ -2,18 +2,12 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: {{ .Chart.Name }}
-  annotations:
-    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ .Chart.Name }}
+  name: juicefs-dev-webhook
 webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
-    service:
-      namespace: {{ .Release.Namespace }}
-      name: {{ .Chart.Name }}
-      port: 9443
-      path: "/mutate"
+    url: "https://juicefs.loca.lt/mutate"
   failurePolicy: Fail
   name: juicefs.breuer.dev
   rules:
@@ -27,4 +21,3 @@ webhooks:
     resources:
     - pods
   sideEffects: None
-

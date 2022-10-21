@@ -30,11 +30,17 @@ func main() {
 	var probeAddr string
 	var annotation bool
 	var storageClasses string
+	var certDir, keyName, certName string
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
 	flag.BoolVar(&annotation, "pod-annotation", false, "Only change mounts for pods with a given annotation.")
 	flag.StringVar(&storageClasses, "storage-classes", "", "Only change mounts for a given storageClassName.")
+
+	flag.StringVar(&certDir, "cert-dir", "", "Folder where key-name and cert-name are located.")
+	flag.StringVar(&keyName, "key-name", "", "Filename for .key file.")
+	flag.StringVar(&certName, "cert-name", "", "Filename for .cert file.")
+
 	opts := zap.Options{
 		Development: true,
 	}
@@ -60,11 +66,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	mgr.GetWebhookServer().Register("/mutate-pod", &webhook.Admission{Handler: &podWebhook{
+	// Server uses default values if provided paths are empty
+	server := &webhook.Server{
+		CertDir:  certDir,
+		KeyName:  keyName,
+		CertName: certName,
+	}
+
+	server.Register("/mutate", &webhook.Admission{Handler: &podWebhook{
 		Client:         mgr.GetClient(),
 		Annotation:     annotation,
 		StorageClasses: storageClassList,
 	}})
+
+	mgr.Add(server)
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")

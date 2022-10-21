@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: ghcr.io/breuerfelix/juicefs-volume-hook:latest
+        image: {{ .Values.controller.image }}:{{ .Values.controller.tag }}
         imagePullPolicy: Always
 {{- if or .Values.controller.podAnnotation .Values.controller.storageClasses }}
         args:

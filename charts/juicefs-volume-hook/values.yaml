@@ -2,4 +2,6 @@ controller:
   annotations:
   podAnnotation: false
   storageClasses:
+  image: ghcr.io/breuerfelix/juicefs-volume-hook
+  tag: latest
 
