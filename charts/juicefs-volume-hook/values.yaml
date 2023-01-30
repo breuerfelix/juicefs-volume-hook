@@ -5,3 +5,5 @@ controller:
   image: ghcr.io/breuerfelix/juicefs-volume-hook
   tag: latest
 
+webhook:
+  failurePolicy: Ignore

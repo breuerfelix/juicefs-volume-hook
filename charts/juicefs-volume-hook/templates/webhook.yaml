@@ -14,7 +14,7 @@ webhooks:
       name: {{ .Chart.Name }}
       port: 9443
       path: "/mutate"
-  failurePolicy: Fail
+  failurePolicy: {{ .Values.webhook.failurePolicy }}
   name: juicefs.breuer.dev
   rules:
   - apiGroups:
