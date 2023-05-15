@@ -27,4 +27,3 @@ webhooks:
     resources:
     - pods
   sideEffects: None
-

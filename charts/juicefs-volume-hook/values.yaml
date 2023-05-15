@@ -3,7 +3,8 @@ controller:
   podAnnotation: false
   storageClasses:
   image: ghcr.io/breuerfelix/juicefs-volume-hook
-  tag: latest
+  tag:
+  imagePullPolicy: Always
 
 webhook:
   failurePolicy: Ignore

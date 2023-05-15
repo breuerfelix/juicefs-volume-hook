@@ -6,14 +6,12 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
-    - name: https
-      port: 9443
-      protocol: TCP
+  - name: https
+    port: 9443
+    protocol: TCP
   selector:
     app: {{ .Chart.Name }}
-
 ---
-
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -22,12 +20,10 @@ metadata:
 spec:
   secretName: {{ .Chart.Name }}-tls
   dnsNames:
-    - {{ .Chart.Name }}.{{ .Release.Namespace }}.svc
+  - {{ .Chart.Name }}.{{ .Release.Namespace }}.svc
   issuerRef:
     name: selfsigned
-
 ---
-
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -35,4 +31,3 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   selfSigned: {}
-

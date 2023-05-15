@@ -21,8 +21,8 @@ spec:
       serviceAccount: {{ .Chart.Name }}
       containers:
       - name: {{ .Chart.Name }}
-        image: {{ .Values.controller.image }}:{{ .Values.controller.tag }}
-        imagePullPolicy: Always
+        image: {{ .Values.controller.image }}:{{ default .Chart.AppVersion .Values.controller.tag }}
+        imagePullPolicy: {{ .Values.controller.imagePullPolicy }}
 {{- if or .Values.controller.podAnnotation .Values.controller.storageClasses }}
         args:
 {{- if .Values.controller.podAnnotation }}
@@ -50,8 +50,7 @@ spec:
           periodSeconds: 10
       terminationGracePeriodSeconds: 10
       volumes:
-        - name: tls
-          secret:
-            secretName: {{ .Chart.Name }}-tls
-            optional: false
-
+      - name: tls
+        secret:
+          secretName: {{ .Chart.Name }}-tls
+          optional: false
