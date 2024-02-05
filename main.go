@@ -26,13 +26,11 @@ func init() {
 }
 
 func main() {
-	var metricsAddr string
 	var probeAddr string
 	var annotation bool
 	var storageClasses string
 	var certDir, keyName, certName string
 
-	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
 	flag.BoolVar(&annotation, "pod-annotation", false, "Only change mounts for pods with a given annotation.")
 	flag.StringVar(&storageClasses, "storage-classes", "", "Only change mounts for a given storageClassName.")
@@ -56,8 +54,6 @@ func main() {
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
-		MetricsBindAddress:     metricsAddr,
-		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         false,
 	})
@@ -67,11 +63,12 @@ func main() {
 	}
 
 	// Server uses default values if provided paths are empty
-	server := &webhook.Server{
+	server := webhook.NewServer(webhook.Options{
+		Port:     9443,
 		CertDir:  certDir,
 		KeyName:  keyName,
 		CertName: certName,
-	}
+	})
 
 	server.Register("/mutate", &webhook.Admission{Handler: &podWebhook{
 		Client:         mgr.GetClient(),
