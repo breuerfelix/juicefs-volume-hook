@@ -8,7 +8,7 @@ import (
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
@@ -90,7 +90,7 @@ func (a *podWebhook) Handle(ctx context.Context, req admission.Request) admissio
 					continue
 				}
 
-				volumeMount.MountPropagation = (*core.MountPropagationMode)(pointer.String("HostToContainer"))
+				volumeMount.MountPropagation = (*core.MountPropagationMode)(ptr.To[string]("HostToContainer"))
 			}
 		}
 	}
