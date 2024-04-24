@@ -17,7 +17,7 @@ const VolumeAnnotation = "juicefs.volume.hook/mount-propagation"
 
 type podWebhook struct {
 	Client         client.Client
-	decoder        *admission.Decoder
+	decoder        admission.Decoder
 	Annotation     bool
 	StorageClasses []string
 }
@@ -103,7 +103,7 @@ func (a *podWebhook) Handle(ctx context.Context, req admission.Request) admissio
 	return admission.PatchResponseFromRaw(req.Object.Raw, marshaledPod)
 }
 
-func (a *podWebhook) InjectDecoder(d *admission.Decoder) error {
+func (a *podWebhook) InjectDecoder(d admission.Decoder) error {
 	a.decoder = d
 	return nil
 }
