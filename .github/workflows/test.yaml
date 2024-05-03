@@ -1,0 +1,22 @@
+name: tests
+
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: checkout
+        uses: actions/checkout@v4
+      -
+        name: setup go
+        uses: actions/setup-go@v5
+      -
+        name: build
+        run: go build .
+      -
+        name: run
+        run: ./juicefs-volume-hook -version
