@@ -2,7 +2,7 @@ module github.com/breuerfelix/juicefs-volume-hook
 
 go 1.24.0
 
-toolchain go1.25.1
+toolchain go1.25.2
 
 require (
 	k8s.io/api v0.34.1
