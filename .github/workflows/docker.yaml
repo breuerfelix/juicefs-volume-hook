@@ -15,7 +15,7 @@ jobs:
       -
         name: docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: |
             ghcr.io/breuerfelix/juicefs-volume-hook
