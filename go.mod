@@ -7,7 +7,7 @@ toolchain go1.27.4
 require (
 	k8s.io/api v0.34.3
 	k8s.io/apimachinery v0.34.3
-	k8s.io/client-go v0.34.3
+	k8s.io/client-go v11.0.0+incompatible
 	k8s.io/utils v0.0.0-20260626114624-be93311217bd
 	sigs.k8s.io/controller-runtime v0.22.4
 )
